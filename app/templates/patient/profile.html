@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="max-width: 600px; margin: 40px auto; padding: 30px;">
+    <h2 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px;">👤 Medical Profile Setup</h2>
+    <p style="color: #7f8c8d;">This data helps our AI provide more accurate disease predictions.</p>
+
+    <form method="POST">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+            <div>
+                <label>Age</label>
+                <input type="number" name="age" value="{{ current_user.age or '' }}" class="form-input" required>
+            </div>
+            <div>
+                <label>Gender</label>
+                <select name="gender" class="form-input">
+                    <option value="Male" {% if current_user.gender == 'Male' %}selected{% endif %}>Male</option>
+                    <option value="Female" {% if current_user.gender == 'Female' %}selected{% endif %}>Female</option>
+                    <option value="Other" {% if current_user.gender == 'Other' %}selected{% endif %}>Other</option>
+                </select>
+            </div>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <label>Medical History & Allergies</label>
+            <textarea name="history" rows="4" class="form-input" placeholder="e.g. Diabetes, Penicillin Allergy, Asthma...">{{ current_user.medical_history or '' }}</textarea>
+        </div>
+
+        <button type="submit" class="btn-primary" style="width: 100%; margin-top: 25px;">💾 Save Medical Profile</button>
+    </form>
+</div>
+
+<style>
+    .form-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin-top: 5px; font-size: 1rem; }
+</style>
+{% endblock %}

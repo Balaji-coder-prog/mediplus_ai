@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-container">
+    
+    <div class="welcome-banner">
+        <div>
+            <h1 style="margin:0; font-size: 2.2rem; letter-spacing: -1px;">Hello, {{ current_user.username }} 👋</h1>
+            <p style="color: rgba(255,255,255,0.8); margin-top: 10px; font-weight: 500;">
+                MediPlus AI: Your clinical analytics are synced for {{ "March 26, 2026" }}
+            </p>
+        </div>
+        <div class="status-badge" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white;">
+            ● System Status: Secure
+        </div>
+    </div>
+
+    <div class="dashboard-grid">
+        
+        <div class="left-col">
+            
+            <div class="action-grid">
+                <a href="{{ url_for('patient.symptom_checker') }}" class="card-link">
+                    <span class="icon">🤖</span>
+                    <h3>Symptom AI</h3>
+                </a>
+                <a href="{{ url_for('patient.lab_diagnostics') }}" class="card-link">
+                    <span class="icon">🔬</span>
+                    <h3>Lab Center</h3>
+                </a>
+                <a href="{{ url_for('patient.book_appointment') }}" class="card-link">
+                    <span class="icon">📅</span>
+                    <h3>Consult</h3>
+                </a>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">
+                    <h2 style="margin:0; font-size: 1.2rem;">📊 AI Health Assessments</h2>
+                    <span class="badge" style="background: #f1f5f9; color: #64748b;">EHR Log</span>
+                </div>
+
+                <div class="assessment-list">
+                    {% if recent_diagnoses %}
+                        {% for diag in recent_diagnoses %}
+                        <div class="history-item">
+                            <div>
+                                <strong style="font-size: 1.05rem;">{{ diag.disease_name }}</strong><br>
+                                <small style="color: var(--text-muted);">{{ diag.timestamp.strftime('%d %b, %H:%M') }}</small>
+                            </div>
+                            <div style="text-align: right;">
+                                <span class="risk-tag {{ diag.risk_level.lower() }}">{{ diag.risk_level }} Risk</span>
+                                <strong style="display: block; margin-top: 5px; font-size: 1.1rem;">{{ diag.probability }}%</strong>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div style="text-align:center; padding: 40px; color: var(--text-muted);">
+                            <p>No AI data found. Start by entering symptoms in the AI Engine.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="right-col">
+            
+            <div class="section-card" style="border-top: 4px solid var(--primary);">
+                <div class="section-title">
+                    <h3 style="margin:0; font-size: 1.1rem;">👤 Medical Profile</h3>
+                    <a href="{{ url_for('patient.profile') }}" style="color: var(--primary); text-decoration: none; font-size: 0.85rem; font-weight: 700;">UPDATE</a>
+                </div>
+                <div style="line-height: 2;">
+                    <p style="margin: 0;"><strong>Age:</strong> {{ current_user.age or '--' }} yrs</p>
+                    <p style="margin: 0;"><strong>Gender:</strong> {{ current_user.gender or '--' }}</p>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 10px; font-style: italic;">
+                        "{{ (current_user.medical_history or 'No history provided')[:85] }}..."
+                    </p>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <h3 style="margin-top:0; font-size: 1.1rem; margin-bottom: 1.5rem;">📅 Next Visit</h3>
+                {% if appointments %}
+                    <div class="side-visit">
+                        <strong style="color: var(--primary);">{{ appointments[0].doctor_name }}</strong>
+                        <p style="margin: 5px 0; font-size: 0.9rem; color: var(--text-muted);">
+                            {{ appointments[0].date }} @ {{ appointments[0].time }}
+                        </p>
+                        <span style="font-size: 0.75rem; letter-spacing: 1px; font-weight: 800; color: var(--success);">CONFIRMED</span>
+                    </div>
+                {% else %}
+                    <p style="color: var(--text-muted); font-size: 0.9rem; text-align: center; border: 1px dashed var(--border); padding: 15px; border-radius: 12px;">
+                        No upcoming visits.
+                    </p>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

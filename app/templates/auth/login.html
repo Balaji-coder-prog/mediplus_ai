@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <div class="auth-header">
+            <span class="logo-icon">🏥</span>
+            <h2>MediPlus AI</h2>
+            <p>Enter your credentials to access your health records.</p>
+        </div>
+
+        <form method="POST">
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" name="email" placeholder="balaji@example.com" required>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="btn-auth">Access My Dashboard</button>
+        </form>
+
+        <div class="auth-footer">
+            <p>New to MediPlus? <a href="{{ url_for('auth.register') }}">Secure Registration</a></p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .auth-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 80vh;
+    }
+
+    .auth-card {
+        background: white;
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .auth-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .logo-icon {
+        font-size: 3rem;
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    .auth-header h2 {
+        color: #2c3e50;
+        margin: 0;
+    }
+
+    .auth-header p {
+        color: #7f8c8d;
+        font-size: 0.9rem;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #34495e;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #eee;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: 0.3s;
+    }
+
+    .form-group input:focus {
+        border-color: #3498db;
+        outline: none;
+    }
+
+    .btn-auth {
+        width: 100%;
+        padding: 14px;
+        background: #3498db;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .btn-auth:hover {
+        background: #2980b9;
+        transform: translateY(-2px);
+    }
+
+    .auth-footer {
+        text-align: center;
+        margin-top: 25px;
+        font-size: 0.9rem;
+    }
+
+    .auth-footer a {
+        color: #3498db;
+        text-decoration: none;
+        font-weight: bold;
+    }
+</style>
+{% endblock %}

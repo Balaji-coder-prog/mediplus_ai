@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block title %}AI Symptom Engine{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-grid">
+        
+        <div class="left-col">
+            <div class="section-card" style="border-top: 5px solid var(--primary);">
+                <div class="section-title">
+                    <h2 style="margin:0; font-size: 1.5rem;">🤖 AI Symptom Analysis</h2>
+                    <span class="status-badge">Engine v2.1 Active</span>
+                </div>
+                <p style="color: var(--text-muted); margin-bottom: 25px;">
+                    Describe your clinical condition. Our Explainable AI (XAI) will process your data against known medical patterns.
+                </p>
+
+                <form method="POST" action="{{ url_for('patient.symptom_checker') }}">
+                    <div class="form-group">
+                        <label>Patient Symptom Description</label>
+                        <textarea name="symptoms" rows="6" placeholder="e.g., Persistent high fever, acute stomach pain, and general weakness since yesterday..." required></textarea>
+                    </div>
+
+                    <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                        <div class="form-group">
+                            <label>Reported Severity</label>
+                            <select name="severity">
+                                <option value="Low">Low (Manageable)</option>
+                                <option value="Medium">Medium (Discomforting)</option>
+                                <option value="High">High (Severe/Acute)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Condition Duration</label>
+                            <input type="text" name="duration" placeholder="e.g., 48 hours" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit">
+                        Execute Diagnostic Analysis →
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="right-col">
+            {% if results %}
+                <div class="section-card" style="background: var(--white); border: 2px solid var(--primary);">
+                    <div class="section-title">
+                        <h3 style="margin:0;">🔍 AI Interpretation</h3>
+                    </div>
+                    
+                    {% for result in results %}
+                        {# FIX: Pre-build the width string to bypass VS Code CSS validation errors #}
+                        {% set prob_style = "width: " ~ result.prob ~ "%;" %}
+                        
+                        <div class="history-item" style="background: #f8fafc; padding: 20px; border-radius: 16px; margin-bottom: 15px; border: 1px solid var(--border);">
+                            <div style="width: 100%;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                    <strong style="font-size: 1.2rem; color: var(--primary);">{{ result.name }}</strong>
+                                    <span class="risk-tag {{ result.risk.lower() }}">{{ result.risk }} RISK</span>
+                                </div>
+                                
+                                <div style="margin: 15px 0;">
+                                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 6px;">
+                                        <span style="color: var(--text-muted);">Confidence Score</span>
+                                        <strong style="color: var(--text-dark);">{{ result.prob }}%</strong>
+                                    </div>
+                                    <div style="background: #e2e8f0; height: 8px; border-radius: 10px; overflow: hidden;">
+                                        <div style="{{ prob_style }} height: 100%; transition: width 1s ease-in-out; background: var(--primary);"></div>
+                                    </div>
+                                </div>
+                                
+                                <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin: 0;">
+                                    <strong style="color: var(--text-dark);">XAI Reasoning:</strong> {{ result.reason }}
+                                </p>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                    {% if rec %}
+                        {# FIX: Pre-build the border color logic to bypass VS Code CSS validation errors #}
+                        {% set border_col = 'var(--danger)' if '🚨' in rec else 'var(--success)' %}
+                        {% set alert_style = "border-left: 5px solid " ~ border_col ~ ";" %}
+                        
+                        <div class="side-visit" style="{{ alert_style }} margin-top: 15px; background: #fdfdfd;">
+                            <p style="margin:0; font-size: 0.95rem; font-weight: 600; color: var(--text-dark);">{{ rec }}</p>
+                        </div>
+                    {% endif %}
+
+                    <div style="margin-top: 25px; display: flex; flex-direction: column; gap: 10px;">
+                        <a href="{{ url_for('patient.book_appointment') }}" class="btn-submit" style="text-align: center; text-decoration: none; background: var(--success);">
+                            Book Clinical Consultation
+                        </a>
+                        <a href="{{ url_for('patient.dashboard') }}" style="text-align: center; color: var(--text-muted); text-decoration: none; font-size: 0.9rem; font-weight: 600;">
+                            Back to Dashboard
+                        </a>
+                    </div>
+                </div>
+            {% else %}
+                <div class="section-card" style="text-align: center; padding: 60px 20px; opacity: 0.7;">
+                    <div style="font-size: 4rem; margin-bottom: 20px;">🩺</div>
+                    <h3 style="color: var(--text-dark); margin: 0;">Awaiting Clinical Data</h3>
+                    <p style="font-size: 0.95rem; color: var(--text-muted); margin-top: 10px;">
+                        Provide symptom details on the left to generate an automated AI Health Assessment.
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}
