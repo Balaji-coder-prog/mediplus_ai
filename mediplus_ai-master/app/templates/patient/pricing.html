@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Upgrade to Pro - ediPlus AI{% endblock %}
+
+{% block content %}
+<div class="dashboard-container" style="max-width: 900px; margin: 0 auto; padding: 40px 20px; text-align: center;">
+    
+    <div style="margin-bottom: 40px;">
+        <h1 style="color: var(--primary); font-size: 2.5rem; margin-bottom: 10px;">Upgrade to Pro 🚀</h1>
+        <p style="color: var(--text-muted); font-size: 1.1rem;">
+            Unlock expert consultations and advanced AI diagnostics.
+        </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+        
+        <div style="background: white; padding: 30px; border-radius: 20px; border: 1px solid #e2e8f0; opacity: 0.8;">
+            <h3 style="color: #64748b;">Trial Plan</h3>
+            <div style="font-size: 2rem; font-weight: bold; margin: 20px 0;">Free</div>
+            <ul style="text-align: left; list-style: none; padding: 0; color: #64748b;">
+                <li style="margin-bottom: 10px;">✅ AI Symptom Checker</li>
+                <li style="margin-bottom: 10px;">✅ Basic Health Tracking</li>
+                <li style="margin-bottom: 10px; text-decoration: line-through; color: #94a3b8;">❌ Book Doctor Appointments</li>
+                <li style="margin-bottom: 10px; text-decoration: line-through; color: #94a3b8;">❌ Video Consultations</li>
+            </ul>
+            <button disabled style="width: 100%; margin-top: 20px; padding: 12px; border-radius: 10px; border: none; background: #cbd5e1; color: white;">Current Plan</button>
+        </div>
+
+        <div style="background: white; padding: 30px; border-radius: 20px; border: 3px solid var(--primary); transform: scale(1.05); box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.2);">
+            <div style="background: var(--primary); color: white; padding: 5px 15px; border-radius: 20px; display: inline-block; font-size: 0.8rem; margin-bottom: 10px;">RECOMMENDED</div>
+            <h3 style="color: var(--primary);">Pro Plan</h3>
+            <div style="font-size: 2rem; font-weight: bold; margin: 20px 0;">₹499 <span style="font-size: 1rem; color: #64748b;">/month</span></div>
+            
+            <ul style="text-align: left; list-style: none; padding: 0;">
+                <li style="margin-bottom: 15px;">✅ **Unlimited** AI Symptom Analysis</li>
+                <li style="margin-bottom: 15px;">✅ **Book Appointments** instantly</li>
+                <li style="margin-bottom: 15px;">✅ **Video Calls** with Top Doctors</li>
+                <li style="margin-bottom: 15px;">✅ **20% Discount** on Lab Tests</li>
+            </ul>
+            
+            <form action="{{ url_for('patient.upgrade_plan') }}" method="POST">
+                <button type="submit" style="width: 100%; margin-top: 10px; padding: 15px; border-radius: 10px; border: none; background: var(--primary); color: white; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 1rem;">
+                    Subscribe & Book Now
+                </button>
+            </form>
+            
+            <p style="margin-top: 15px; font-size: 0.85rem; color: var(--text-muted);">
+                <i>Doctor kitta pesanuma? Udane upgrade pannunga!</i>
+            </p>
+        </div>
+
+    </div>
+
+    <div style="margin-top: 40px;">
+        <a href="{{ url_for('patient.dashboard') }}" style="color: var(--text-muted); text-decoration: none; font-weight: 600;">
+            ← Back to Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}
