@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>{% block title %}{% endblock %} | MediPlus AI</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=1.2">
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏥</text></svg>">
+
+    <style>
+        /* Ensuring smooth layout transitions */
+        .container { min-height: 85vh; padding-bottom: 60px; }
+        .alert-container { 
+            position: fixed; 
+            top: 20px; 
+            right: 20px; 
+            z-index: 9999; 
+            max-width: 400px; 
+            width: 100%; 
+        }
+        .alert { transition: opacity 0.5s ease, transform 0.5s ease; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{{ url_for('patient.dashboard') }}" class="nav-logo">🏥 MediPlus AI</a>
+            
+            <div class="nav-links">
+                {% if current_user.is_authenticated %}
+                    {% if current_user.role == 'doctor' %}
+                        <a href="{{ url_for('doctor.dashboard') }}">Dr. Panel</a>
+                    {% else %}
+                        <a href="{{ url_for('patient.dashboard') }}">Dashboard</a>
+                    {% endif %}
+                    <a href="{{ url_for('auth.logout') }}" class="logout-btn">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('auth.login') }}">Login</a>
+                    <a href="{{ url_for('auth.register') }}" style="color: var(--primary); border: 1px solid var(--primary); padding: 5px 15px; border-radius: 8px;">Get Started</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="alert-container" id="alert-box">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category if category != 'message' else 'info' }}" onclick="this.style.display='none'">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer style="background: #ffffff; border-top: 1px solid #e2e8f0; padding: 40px 20px; color: #64748b; font-size: 0.85rem;">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+            <p>&copy; 2026 MediPlus AI Health Systems. HIPAA Compliant Analytics.</p>
+            <div style="display: flex; gap: 20px;">
+                <span>System Status: <strong style="color: var(--success);">Online</strong></span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 500);
+            });
+        }, 5000);
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}Schedule Consultation{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-grid" style="grid-template-columns: 1.1fr 0.9fr;">
+        
+        <div class="left-col">
+            <div class="section-card" style="border-top: 5px solid var(--primary);">
+                <div class="section-title">
+                    <h2 style="margin:0;">📅 Book Specialist Consult</h2>
+                    <span class="status-badge">Secure Channel</span>
+                </div>
+                <p style="color: var(--text-muted); margin-bottom: 30px;">
+                    Select a clinician to review your AI-generated health patterns and clinical data.
+                </p>
+
+                <form method="POST" action="{{ url_for('patient.book_appointment') }}">
+                    
+                    <div class="form-group">
+                        <label>Select Clinical Specialist</label>
+                        <select name="doctor_name" required>
+    <option value="" disabled selected>Choose a Specialist...</option>
+    
+    <option value="Dr. Rajesh Kumar">Dr. Rajesh Kumar (General Physician)</option>
+    <option value="Dr. Sarah Williams">Dr. Sarah Williams (Dermatologist - Skin Specialist)</option>
+    <option value="Dr. Arjun Mehta">Dr. Arjun Mehta (Gastroenterologist - Stomach)</option>
+    <option value="Dr. Priya Dharshini">Dr. Priya Dharshini (Cardiologist - Heart)</option>
+    <option value="Dr. Vikram Singh">Dr. Vikram Singh (Neurologist - Brain)</option>
+    <option value="Dr. Ananya Iyer">Dr. Ananya Iyer (Pediatrician - Kids)</option>
+    <option value="Dr. David Miller">Dr. David Miller (Orthopedic - Joints)</option>
+
+    {% for doctor in doctors %}
+        <option value="Dr. {{ doctor.username }}">Dr. {{ doctor.username.title() }} (Clinical Specialist)</option>
+    {% endfor %}
+</select>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label>Preferred Date</label>
+                            <input type="date" name="date" required min="{{ now }}">
+                        </div>
+                        <div class="form-group">
+                            <label>Preferred Time Slot</label>
+                            <select name="time" required>
+                                <option value="" disabled selected>Select Slot</option>
+                                <option value="09:00 AM">09:00 AM</option>
+                                <option value="11:30 AM">11:30 AM</option>
+                                <option value="02:00 PM">02:00 PM</option>
+                                <option value="04:30 PM">04:30 PM</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit" style="margin-top: 20px;">
+                        Confirm Secure Booking →
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="right-col">
+            <div class="section-card" style="background: #f8fafc; border: 1px solid var(--border);">
+                <h3 style="margin-top: 0; color: var(--text-main);">📌 Booking Guidelines</h3>
+                
+                <div class="side-visit" style="background: white; border-left: 5px solid var(--success); padding: 1.2rem;">
+                    <p style="font-size: 0.9rem; margin: 0; line-height: 1.5;">
+                        <strong>AI Clinical Sync:</strong> Your recent <strong>Symptom Analysis</strong> and <strong>Lab Interpretations</strong> are pre-synced to the doctor's dashboard.
+                    </p>
+                </div>
+
+                <div class="side-visit" style="background: white; border-left: 5px solid var(--warning); margin-top: 20px; padding: 1.2rem;">
+                    <p style="font-size: 0.9rem; margin: 0; line-height: 1.5;">
+                        <strong>Virtual Visit:</strong> A secure video link will appear in your dashboard 10 minutes before the scheduled time.
+                    </p>
+                </div>
+
+                <div style="margin-top: 35px; padding: 25px; text-align: center; border: 2px dashed var(--border); border-radius: 20px; background: rgba(255,255,255,0.5);">
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">
+                        Experiencing a medical emergency? <br>
+                        <strong style="color: var(--danger); font-size: 1.1rem;">Call: 911 / 108</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

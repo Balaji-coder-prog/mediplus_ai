@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Digital Prescription Pad{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-grid">
+        
+        <div class="left-col">
+            <div class="section-card" style="border-top: 5px solid var(--primary);">
+                <div class="section-title">
+                    <h2 style="margin:0;">📋 Patient Clinical Context</h2>
+                </div>
+                
+                <div style="margin-bottom: 20px; padding: 15px; background: #f8fafc; border-radius: 12px; border: 1px solid var(--border);">
+                    <p style="margin:0; font-size: 0.9rem; color: var(--text-muted);">Patient Name</p>
+                    <strong style="font-size: 1.1rem; color: var(--text-dark);">{{ appt.patient_id }} - {{ patient.username.title() }}</strong>
+                </div>
+
+                <h4 style="color: var(--primary); margin-bottom: 10px;">🤖 AI Symptom Analysis</h4>
+                {% if ai_diagnoses %}
+                    {% for diag in ai_diagnoses %}
+                    <div style="margin-bottom: 10px; padding: 12px; background: white; border-radius: 8px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong style="font-size: 0.95rem;">{{ diag.disease_name }}</strong>
+                            <p style="margin:0; font-size: 0.8rem; color: var(--text-muted);">Confidence: {{ diag.probability }}%</p>
+                        </div>
+                        <span class="risk-tag {{ diag.risk_level.lower() }}">{{ diag.risk_level }}</span>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">No AI symptom data available.</p>
+                {% endif %}
+
+                <h4 style="color: var(--primary); margin-top: 25px; margin-bottom: 10px;">🧪 AI Lab Alerts</h4>
+                {% if ai_labs %}
+                    {% for lab in ai_labs %}
+                    <div style="padding: 10px; background: #fff5f5; border-left: 4px solid var(--danger); border-radius: 4px; margin-bottom: 10px;">
+                        <p style="margin:0; font-size: 0.85rem; color: #c53030;"><strong>{{ lab.test_name }}:</strong> {{ lab.ai_interpretation }}</p>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">No lab alerts detected.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="right-col">
+            <div class="section-card" style="min-height: 500px; display: flex; flex-direction: column;">
+                <div class="section-title" style="border-bottom: 2px dashed var(--border); padding-bottom: 15px;">
+                    <h2 style="margin:0;">✍️ E-Prescription</h2>
+                    <span class="status-badge">SECURE PORTAL</span>
+                </div>
+
+                <form method="POST" style="flex-grow: 1; display: flex; flex-direction: column; margin-top: 20px;">
+                    <div class="form-group" style="flex-grow: 1;">
+                        <label>Medication, Dosage, and Clinical Advice</label>
+                        <textarea name="meds" style="width: 100%; height: 300px; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px; font-family: 'Courier New', Courier, monospace; font-size: 1.1rem; background: #fffdfa;" 
+                        placeholder="R&#10;1. Paracetamol 500mg - BD x 3 days&#10;2. ORS fluids - as needed&#10;&#10;Advice: Bed rest and follow-up in 48 hours." required></textarea>
+                    </div>
+
+                    <div style="margin-top: 20px;">
+                        <button type="submit" class="btn-submit" style="width: 100%; font-weight: bold; height: 55px;">
+                            Validate & Issue E-Prescription →
+                        </button>
+                        <a href="{{ url_for('doctor.dashboard') }}" style="display: block; text-align: center; margin-top: 15px; color: var(--text-muted); text-decoration: none; font-size: 0.9rem;">Cancel & Exit</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

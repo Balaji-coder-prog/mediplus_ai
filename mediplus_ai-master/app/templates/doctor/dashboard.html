@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="dashboard-header">
+    <h1>👨‍⚕️ Doctor's Consultation Panel</h1>
+    <p>Manage your patient queue and upload E-Prescriptions.</p>
+</div>
+
+<div class="card">
+    <h3>📅 Today's Appointments</h3>
+    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+        <thead>
+            <tr style="text-align: left; border-bottom: 2px solid #eee;">
+                <th style="padding: 10px;">Patient ID</th>
+                <th style="padding: 10px;">Date/Time</th>
+                <th style="padding: 10px;">Status</th>
+                <th style="padding: 10px;">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for appt in appointments %}
+            <tr style="border-bottom: 1px solid #f9f9f9;">
+                <td style="padding: 15px;">Patient #{{ appt.patient_id }}</td>
+                <td style="padding: 15px;">{{ appt.date }} at {{ appt.time }}</td>
+                <td style="padding: 15px;"><span class="status-badge">{{ appt.status }}</span></td>
+                <td style="padding: 15px;">
+                    {% if appt.status == 'Scheduled' %}
+                    <a href="{{ url_for('doctor.prescribe', appt_id=appt.id) }}" class="btn-primary" style="padding: 5px 15px; font-size: 0.8rem;">Write Prescription</a>
+                    {% else %}
+                    <span style="color: green;">✔ Completed</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
